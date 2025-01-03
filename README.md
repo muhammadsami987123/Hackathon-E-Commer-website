@@ -1,19 +1,22 @@
-# Hackathon E-Commerce Website 🛍️
+# Hackathon E-Commerce Website 🛒
 
-This project is a **fully responsive** e-commerce website UI/UX, designed and developed within **24 hours** as part of a hackathon challenge. Built with modern tools like **Tailwind CSS** and **Node.js**, it showcases clean design, efficient functionality, and adaptability across all devices.
+This project is a **fully responsive** e-commerce website UI/UX, designed and developed within **24 hours** as part of a hackathon challenge. Built with modern tools like **Tailwind CSS**, **Next.js**, and **Sanity CMS**, it showcases clean design, efficient functionality, and adaptability across all devices.
 
 ## 🚀 Features
 
 - **Responsive Design:** Optimized for seamless use on desktops, tablets, and mobile devices.
 - **Modern UI/UX:** Built with a focus on user experience and accessibility.
 - **Fast Prototyping:** Leveraged Tailwind CSS for rapid and consistent styling.
-- **Backend Integration:** Node.js ensures smooth server-side operations.
+- **Headless CMS Integration:** Sanity CMS ensures efficient content management.
+- **Add-to-Cart Functionality:** Seamless cart integration with dynamic updates.
+- **Login/Signup Pages:** Secure and intuitive user authentication system.
 - **Scalable Structure:** Ready for future enhancements and integrations.
 
 ## 💻 Technologies Used
 
-- **Frontend:** HTML, CSS, Tailwind CSS
+- **Frontend:** HTML, CSS, Tailwind CSS, Next.js
 - **Backend:** Node.js
+- **CMS:** Sanity CMS
 - **Deployment:** [Vercel](https://hackthone-two.vercel.app/)
 
 ## 🌐 Live Demo
@@ -24,12 +27,13 @@ Experience the project live: [Hackathon E-Commerce Website](https://hackthone-tw
 
 - Building responsive layouts quickly with Tailwind CSS.
 - Integrating backend functionalities efficiently using Node.js.
-- Managing time effectively during a high-pressure hackathon environment.
+- Managing content dynamically with Sanity CMS.
+- Implementing user authentication and add-to-cart functionality.
 - Enhancing design skills to create user-friendly interfaces.
 
 ## 🙌 Acknowledgments
 
-- **Teacher’s Support:** Special thanks to my teacher for their invaluable guidance and encouragement.
+- **Teacher’s Support:** Special thanks to **Sir Okasha Aijaz** and **Sir Ameen Alam** for their invaluable guidance and encouragement.
 - **Hackathon Organizers:** For providing a platform to challenge my skills and learn.
 
 ## 🛠️ Installation
