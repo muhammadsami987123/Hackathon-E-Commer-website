@@ -43,7 +43,7 @@ function Navbar() {
           )}
         </button>
 
-        {/* Desktop Menu - Always visible */}
+        {/* Desktop Menu */}
         <ul className="hidden md:flex text-xl items-center space-x-8">
           <li>
             <Link href="/" className="hover:text-blue-500">
@@ -67,16 +67,22 @@ function Navbar() {
           </li>
         </ul>
 
-        {/* Icons Section */}
-        <div className="flex items-center space-x-4">
+        {/* Icons and Login Section */}
+        <div className="hidden md:flex items-center space-x-4">
           <MdOutlinePeople className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
           <IoIosSearch className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
           <CiHeart className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
           <HiOutlineShoppingCart className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
+          <Link
+            href="/login"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all"
+          >
+            Login/Signup
+          </Link>
         </div>
       </div>
 
-      {/* Mobile Menu - Only visible on small screens and when toggled */}
+      {/* Mobile Menu */}
       <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} bg-white p-4`}>
         <ul className="space-y-4">
           <li>
@@ -98,6 +104,20 @@ function Navbar() {
             <Link href="/about" className="block text-xl text-gray-700 hover:text-blue-500">
               Contact
             </Link>
+          </li>
+          <li>
+            <Link
+              href="/login"
+              className="block bg-blue-500 text-white text-center px-4 py-2 rounded-md hover:bg-blue-600 transition-all"
+            >
+              Login/Signup
+            </Link>
+          </li>
+          <li className="flex justify-center items-center space-x-4">
+            <MdOutlinePeople className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
+            <IoIosSearch className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
+            <CiHeart className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
+            <HiOutlineShoppingCart className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
           </li>
         </ul>
       </div>

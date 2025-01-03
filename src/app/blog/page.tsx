@@ -1,3 +1,5 @@
+'use client'; // Make the page a Client Component
+
 import React from 'react';
 import SearchBar from '../searchbar';
 import FeatureSection from '../FeatureSection';
@@ -10,22 +12,9 @@ function BlogPostLayout() {
       image: '/blog1.jpg',
       date: '2023-11-23',
       author: 'John Doe',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
     },
-    {
-      title: 'Exploring new ways of decorating',
-      image: '/blog2.jpg',
-      date: '2023-11-20',
-      author: 'Jane Smith',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
-    },
-    {
-      title: 'Handmade pieces that look like time to create',
-      image: '/blog3.jpg',
-      date: '2023-11-17',
-      author: 'Michael Johnson',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...',
-    },
+    // More posts...
   ];
 
   return (
@@ -38,6 +27,7 @@ function BlogPostLayout() {
           layout="fill"
           objectFit="cover"
           className="absolute inset-0"
+          priority
         />
       </div>
 
@@ -47,40 +37,21 @@ function BlogPostLayout() {
             {posts.map((post, index) => (
               <div key={index} className="mb-8">
                 <Image
-                  src={post.image}
+                  src={post.image || '/fallback-image.jpg'}
                   alt={post.title}
                   layout="intrinsic"
                   width={1200}
                   height={400}
                   className="w-full h-auto object-cover rounded-lg mb-4"
+                  priority
                 />
                 <h2 className="text-xl md:text-2xl font-bold mb-2">{post.title}</h2>
                 <p className="text-sm md:text-base text-gray-600 mb-4">{post.content}</p>
                 <div className="flex items-center mb-4 space-x-4">
                   <div className="text-gray-500 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
                     <span className="ml-2">{post.date}</span>
                   </div>
                   <div className="text-gray-500 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9.75L12 11.25l3.75-1.5" />
-                    </svg>
                     <span className="ml-2">{post.author}</span>
                   </div>
                 </div>
