@@ -1,24 +1,46 @@
 'use client';
+
 import Image from 'next/image';
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Correct import for app router
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { CiHeart, CiShare2, CiSliderHorizontal } from "react-icons/ci";
+import sanityClient from "@/sanity/lib/sanity";
+
+interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string;
+}
 
 export default function ProductSection() {
   const router = useRouter();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [visibleProductsCount, setVisibleProductsCount] = useState(4); // Start with 4 products visible
+  const [visibleProductsCount, setVisibleProductsCount] = useState(4); // Initially show 4 products
+  const [products, setProducts] = useState<Product[]>([]); // State for products
 
-  const products = [
-    { name: 'Sytherine', description: 'Stylish cafe chair', price: '2,500,000', image: '/product1.jpg' },
-    { name: 'Chair', description: 'Will Executive chair', price: '1,500,000', image: '/product2.jpg' },
-    { name: 'Lotto', description: 'Luxury big sofa', price: '7,000,000', image: '/product3.jpg' },
-    { name: 'Respirs', description: 'Outdoor bar table and stool', price: '5,000,000', image: '/product4.jpg' },
-    { name: 'Grifo', description: 'Night lamp', price: '1,500,000', image: '/product5.jpg' },
-    { name: 'Muggo', description: 'Small mug', price: '1,500,000', image: '/product6.jpg' },
-    { name: 'Pingky', description: 'Cute bed set', price: '7,000,000', image: '/product7.jpg' },
-    { name: 'Potty', description: 'Minimalist flower pot', price: '5,000,000', image: '/product8.jpg' },
-  ];
+  // Fetch products from Sanity
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const query = `*[_type == "product"]{
+        _id,
+        name,
+        description,
+        price,
+        "image": image.asset->url // Resolves the image URL
+      }`;
+
+      try {
+        const sanityProducts = await sanityClient.fetch(query);
+        setProducts(sanityProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleMouseEnter = (index: number) => setHoveredIndex(index);
   const handleMouseLeave = () => setHoveredIndex(null);
@@ -27,9 +49,9 @@ export default function ProductSection() {
     setVisibleProductsCount((prevCount) => Math.min(prevCount + 4, products.length)); // Ensure it doesn't exceed total products
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (productId: string) => {
     try {
-      router.push('/addtocard');
+      router.push(`/addtocard`);
     } catch (error) {
       console.error("Failed to redirect to cart:", error);
     }
@@ -43,14 +65,14 @@ export default function ProductSection() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto">
         {products.slice(0, visibleProductsCount).map((product, index) => (
           <div
-            key={index}
+            key={product._id}
             className="relative bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
             <Image
-              src={product.image}
-              alt={product.name}
+              src={product.image || "/placeholder.jpg"} // Fallback to placeholder if image is missing
+              alt={product.name || "Product"}
               className="w-full h-60 object-cover rounded-lg mb-4"
               width={400}
               height={240}
