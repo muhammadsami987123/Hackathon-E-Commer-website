@@ -6,7 +6,7 @@ import FeatureSection from "../FeatureSection";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import sanityClient from "@/sanity/lib/sanity";
+import {sanityClient} from "@/sanity/lib/sanity";
 
 interface Product {
   id: string;
@@ -14,6 +14,15 @@ interface Product {
   description: string;
   price: string;
   image: string;
+}
+
+// Define a type for the raw data from Sanity
+interface SanityProduct {
+  _id: string;
+  name: string;
+  description: string;
+  price: string;
+  image: string | null;
 }
 
 function ProductSection() {
@@ -32,8 +41,11 @@ function ProductSection() {
       }`;
 
       try {
-        const sanityProducts = await sanityClient.fetch(query);
-        const formattedProducts = sanityProducts.map((product: any) => ({
+        // Explicitly type fetched data as SanityProduct[]
+        const sanityProducts: SanityProduct[] = await sanityClient.fetch(query);
+
+        // Map raw SanityProduct to Product interface
+        const formattedProducts = sanityProducts.map((product) => ({
           id: product._id,
           name: product.name,
           description: product.description,
@@ -49,7 +61,7 @@ function ProductSection() {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = (productId: string) => {
+  const handleAddToCart = () => {
     try {
       router.push(`/addtocard`);
     } catch (error) {

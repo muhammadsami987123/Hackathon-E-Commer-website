@@ -14,7 +14,21 @@ function BlogPostLayout() {
       author: 'John Doe',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
     },
-    // More posts...
+    {
+      title: 'Going all-in with minimal design',
+      image: '/blog2.jpg',
+      date: '2023-11-23',
+      author: 'John Doe',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
+    },
+    {
+      title: 'Going all-in with minimal design',
+      image: '/blog3.jpg',
+      date: '2023-11-23',
+      author: 'John Doe',
+      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
+    },
+    
   ];
 
   return (

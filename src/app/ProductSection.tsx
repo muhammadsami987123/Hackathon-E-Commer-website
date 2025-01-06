@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CiHeart, CiShare2, CiSliderHorizontal } from "react-icons/ci";
-import sanityClient from "@/sanity/lib/sanity";
+import { sanityClient } from "@/sanity/lib/sanity";
 
 interface Product {
   _id: string;
@@ -29,7 +29,7 @@ export default function ProductSection() {
         description,
         price,
         "image": image.asset->url // Resolves the image URL
-      }`;
+       }`;
 
       try {
         const sanityProducts = await sanityClient.fetch(query);
@@ -51,6 +51,7 @@ export default function ProductSection() {
 
   const handleAddToCart = (productId: string) => {
     try {
+      console.log("Adding product to cart:", productId); // Debug log
       router.push(`/addtocard`);
     } catch (error) {
       console.error("Failed to redirect to cart:", error);
@@ -88,7 +89,7 @@ export default function ProductSection() {
                 <button
                   className="bg-yellow-500 text-white font-bold py-2 px-6 rounded-md hover:bg-yellow-600"
                   aria-label="Add to Cart"
-                  onClick={handleAddToCart}
+                  onClick={() => handleAddToCart(product._id)} // Pass product ID using an inline function
                 >
                   Add to Cart
                 </button>
