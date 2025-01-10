@@ -6,6 +6,7 @@ import { MdOutlinePeople } from 'react-icons/md';
 import { IoIosSearch } from 'react-icons/io';
 import { CiHeart } from 'react-icons/ci';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
+import { useShoppingCart } from 'use-shopping-cart';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const {handleCartClick} = useShoppingCart();
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto p-4 flex justify-between items-center">
@@ -72,7 +74,7 @@ function Navbar() {
           <MdOutlinePeople className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
           <IoIosSearch className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
           <CiHeart className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
-          <HiOutlineShoppingCart className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" />
+          <HiOutlineShoppingCart className="text-2xl text-gray-600 hover:text-red-500 cursor-pointer transition-colors" onClick={() => handleCartClick()} />
           <Link
             href="/login"
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-all"

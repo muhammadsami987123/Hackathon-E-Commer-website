@@ -5,72 +5,81 @@ import { CiHeart, CiShare2, CiSliderHorizontal } from "react-icons/ci";
 import FeatureSection from "../FeatureSection";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import {sanityClient} from "@/sanity/lib/sanity";
+import { sanityClient } from "@/sanity/lib/sanity";
 
 interface Product {
   id: string;
   name: string;
+  slug: string;
   description: string;
   price: string;
   image: string;
+  shippingInfo: string; // Added shipping information
+  trackingLink: string; // Tracking link for each product
 }
 
-// Define a type for the raw data from Sanity
 interface SanityProduct {
   _id: string;
   name: string;
+  slug: { current: string } | string; // Handling dynamic slug formats
   description: string;
   price: string;
   image: string | null;
+  shippingInfo: string;
+  trackingLink: string;
 }
 
 function ProductSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const router = useRouter();
+  const [error, setError] = useState<string | null>(null); // Error handling state
 
   useEffect(() => {
     const fetchProducts = async () => {
       const query = `*[_type == "product"]{
         _id,
         name,
+        slug,
         description,
         price,
-        "image": image.asset->url // Resolve image URL
+        "image": image.asset->url,
+        shippingInfo,
+        trackingLink
       }`;
 
       try {
-        // Explicitly type fetched data as SanityProduct[]
         const sanityProducts: SanityProduct[] = await sanityClient.fetch(query);
-
-        // Map raw SanityProduct to Product interface
         const formattedProducts = sanityProducts.map((product) => ({
           id: product._id,
           name: product.name,
+          slug: typeof product.slug === "object" ? product.slug.current : product.slug,
           description: product.description,
           price: product.price,
-          image: product.image || "/placeholder.jpg", // Use placeholder for missing images
+          image: product.image || "/placeholder.jpg",
+          shippingInfo: product.shippingInfo || "Standard Shipping (3-5 days)",
+          trackingLink: product.trackingLink || "#",
         }));
         setProducts(formattedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
+        setError("Failed to load products. Please try again later.");
       }
     };
 
     fetchProducts();
   }, []);
 
-  const handleAddToCart = () => {
-    try {
-      router.push(`/addtocard`);
-    } catch (error) {
-      console.error("Failed to redirect to cart:", error);
-    }
-  };
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex justify-center items-center">
+        <p className="text-red-500 text-lg">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {/* Header Section */}
       <header
         className="relative bg-cover bg-center h-64"
         style={{ backgroundImage: "url('/shop.jpg')" }}
@@ -78,6 +87,7 @@ function ProductSection() {
         <div className="absolute inset-0 bg-opacity-50"></div>
       </header>
 
+      {/* Filter and Products Count */}
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
           <button className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition">
@@ -87,6 +97,7 @@ function ProductSection() {
         </div>
       </div>
 
+      {/* Products Section */}
       <div className="p-2 px-10 rounded-lg">
         <h2 className="mx-auto py-1 text-3xl font-bold text-center mb-8">Our Products</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mx-auto">
@@ -97,10 +108,10 @@ function ProductSection() {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <Link href={`/product/${product.name.toLowerCase()}`} passHref>
+              <Link href={`/product/${product.slug}`} passHref>
                 <div>
                   <Image
-                    src={product.image} // Image source
+                    src={product.image}
                     alt={product.name || "Product"}
                     width={500}
                     height={500}
@@ -108,29 +119,30 @@ function ProductSection() {
                   />
                 </div>
               </Link>
-              <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+              <h3 className="text-xl font-bold mb-2 text-gray-900">{product.name}</h3>
               <p className="text-gray-600">{product.description}</p>
-              <p className="text-lg font-bold mb-4">Rp {product.price}</p>
+              <p className="text-lg font-bold mb-2 text-gray-800">Rp {product.price}</p>
+              <p className="text-sm text-gray-500 mb-4">{product.shippingInfo}</p>
               {hoveredIndex === index && (
-                <div className="absolute inset-0 flex flex-col justify-center items-center gap-4 bg-gray-900 bg-opacity-50 rounded-lg">
+                <div className="absolute top-2 right-2 flex gap-2">
                   <button
-                    className="bg-yellow-500 text-white font-bold py-2 px-6 rounded-md hover:bg-yellow-600"
-                    aria-label="Add to Cart"
-                    onClick={handleAddToCart}
+                    title="Share"
+                    className="p-2 bg-white rounded-full shadow hover:scale-105"
                   >
-                    Add to Cart
+                    <CiShare2 />
                   </button>
-                  <div className="flex justify-center items-center gap-4">
-                    <button className="text-white flex items-center gap-2" aria-label="Share product">
-                      <CiShare2 className="w-6 h-6" /> Share
-                    </button>
-                    <button className="text-white flex items-center gap-2" aria-label="Compare products">
-                      <CiSliderHorizontal className="w-6 h-6" /> Compare
-                    </button>
-                    <button className="text-white flex items-center gap-2" aria-label="Like product">
-                      <CiHeart className="w-6 h-6" /> Like
-                    </button>
-                  </div>
+                  <button
+                    title="Favorite"
+                    className="p-2 bg-white rounded-full shadow hover:scale-105"
+                  >
+                    <CiHeart />
+                  </button>
+                  <button
+                    title="Options"
+                    className="p-2 bg-white rounded-full shadow hover:scale-105"
+                  >
+                    <CiSliderHorizontal />
+                  </button>
                 </div>
               )}
             </div>
@@ -138,6 +150,7 @@ function ProductSection() {
         </div>
       </div>
 
+      {/* Feature Section */}
       <FeatureSection />
     </div>
   );
