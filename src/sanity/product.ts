@@ -7,38 +7,56 @@ const productSchema = {
       name: "id",
       title: "ID",
       type: "string",
-      description: "Unique identifier for the product.",
+      validation: (Rule) => Rule.required(),
     },
     {
       name: "name",
       title: "Name",
       type: "string",
-      description: "The name of the product.",
-      validation: (Rule) => Rule.required().max(100), // Ensures the field is required and has a max length
+      validation: (Rule) => Rule.required().min(2).max(100),
+    },
+    {
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: {
+        source: "name", // Use 'name' field as the source for the slug
+        maxLength: 96,  // Set max length for the slug
+        slugify: (input) => {
+          // Custom slugify function to handle spaces, special characters, etc.
+          return input
+            .toLowerCase()
+            .replace(/\s+/g, "-")          // Replace spaces with hyphens
+            .replace(/[^\w-]+/g, "")       // Remove special characters
+            .slice(0, 96);                 // Limit the length to 96 characters
+        },
+      },
+      validation: (Rule) => Rule.required(), // Ensure the slug is always generated
     },
     {
       name: "description",
       title: "Description",
       type: "text",
-      description: "A detailed description of the product.",
-      validation: (Rule) => Rule.required().min(10).max(1000), // Adds min/max validation for the description
+      validation: (Rule) => Rule.optional(),
     },
     {
       name: "price",
       title: "Price",
-      type: "string", // Use "number" instead of "string" for numerical data
-      description: "Price of the product.",
-      validation: (Rule) => Rule.required().min(0), // Ensures price is positive
+      type: "string",
+      validation: (Rule) => Rule.required().min(0),
+    },
+    {
+         name: "price_id",
+          title: "stripe Price ID",
+          type: "string",
     },
     {
       name: "image",
       title: "Image",
       type: "image",
       options: {
-        hotspot: true, // Enables hotspot for better cropping and resizing
+        hotspot: true, // Enable hotspot for image cropping
       },
-      description: "Product image.",
-      validation: (Rule) => Rule.required(), // Ensures an image is uploaded
     },
   ],
 };
