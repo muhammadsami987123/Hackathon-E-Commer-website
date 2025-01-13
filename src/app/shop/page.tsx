@@ -1,13 +1,11 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { CiHeart, CiShare2, CiSliderHorizontal } from "react-icons/ci";
 import FeatureSection from "../FeatureSection";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {sanityClient} from "@/sanity/lib/sanity";
-
+import { sanityClient } from "@/sanity/lib/sanity";
 interface Product {
   id: string;
   name: string;
@@ -16,13 +14,15 @@ interface Product {
   image: string;
 }
 
-// Define a type for the raw data from Sanity
 interface SanityProduct {
   _id: string;
   name: string;
+  slug: string;
   description: string;
   price: string;
-  image: string | null;
+  image: string;
+  shippingInfo?: string;
+  trackingLink?: string;
 }
 
 function ProductSection() {
@@ -35,22 +35,23 @@ function ProductSection() {
       const query = `*[_type == "product"]{
         _id,
         name,
+        slug,
         description,
         price,
-        "image": image.asset->url // Resolve image URL
+        "image": image.asset->url, // Resolve image URL
       }`;
 
       try {
-        // Explicitly type fetched data as SanityProduct[]
         const sanityProducts: SanityProduct[] = await sanityClient.fetch(query);
-
-        // Map raw SanityProduct to Product interface
         const formattedProducts = sanityProducts.map((product) => ({
           id: product._id,
           name: product.name,
+          slug: product.slug,
           description: product.description,
           price: product.price,
-          image: product.image || "/placeholder.jpg", // Use placeholder for missing images
+          image: product.image || "/placeholder.jpg",
+          shippingInfo: product.shippingInfo || "Standard Shipping (3-5 days)",
+          trackingLink: product.trackingLink || "/track", // Default tracking link
         }));
         setProducts(formattedProducts);
       } catch (error) {
@@ -60,6 +61,7 @@ function ProductSection() {
 
     fetchProducts();
   }, []);
+  
 
   const handleAddToCart = () => {
     try {

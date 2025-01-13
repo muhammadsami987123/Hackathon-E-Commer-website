@@ -1,10 +1,10 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  reactStrictMode: true, // Enables React's Strict Mode
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
   images: {
-    domains: ["cdn.sanity.io"], // Allow images from Sanity's CDN
+    domains: ['cdn.sanity.io'], // Add the domain here
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
