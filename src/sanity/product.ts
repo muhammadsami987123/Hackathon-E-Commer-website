@@ -1,64 +1,66 @@
-const productSchema = {
-  name: "product",
-  title: "Product",
-  type: "document",
-  fields: [
-    {
-      name: "id",
-      title: "ID",
-      type: "string",
-      validation: (Rule) => Rule.required(),
-    },
-    {
-      name: "name",
-      title: "Name",
-      type: "string",
-      validation: (Rule) => Rule.required().min(2).max(100),
-    },
-    {
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "name", // Use 'name' field as the source for the slug
-        maxLength: 96,  // Set max length for the slug
-        slugify: (input) => {
-          // Custom slugify function to handle spaces, special characters, etc.
-          return input
-            .toLowerCase()
-            .replace(/\s+/g, "-")          // Replace spaces with hyphens
-            .replace(/[^\w-]+/g, "")       // Remove special characters
-            .slice(0, 96);                 // Limit the length to 96 characters
-        },
-      },
-      validation: (Rule) => Rule.required(), // Ensure the slug is always generated
-    },
-    {
-      name: "description",
-      title: "Description",
-      type: "text",
-      validation: (Rule) => Rule.optional(),
-    },
-    {
-      name: "price",
-      title: "Price",
-      type: "string",
-      validation: (Rule) => Rule.required().min(0),
-    },
-    {
-         name: "price_id",
-          title: "stripe Price ID",
-          type: "string",
-    },
-    {
-      name: "image",
-      title: "Image",
-      type: "image",
-      options: {
-        hotspot: true, // Enable hotspot for image cropping
-      },
-    },
-  ],
-};
+import { defineType } from "sanity"
 
-export default productSchema;
+export const product = defineType({
+    name: "product",
+    title: "Product",
+    type: "document",
+    fields: [
+        {
+            name: "title",
+            title: "Title",
+            validation: (rule) => rule.required(),
+            type: "string"
+        },
+        {
+            name: "slug",
+            title: "Slug",
+            type: "slug",
+            options: {
+              source: "title", // Generate slug from the title field
+              maxLength: 96,
+            },
+            validation: (Rule) => Rule.required(),
+          },
+          {
+            name: "price_id",
+            title: "Stripe Price ID",
+            type: "string",
+            validation: (Rule) => Rule.required(),
+          },
+      
+        {
+            name:"description",
+            type:"text",
+            validation: (rule) => rule.required(),
+            title:"Description",
+        },
+        {
+            name: "productImage",
+            type: "image",
+            validation: (rule) => rule.required(),
+            title: "Product Image"
+        },
+        {
+            name: "price",
+            type: "number",
+            validation: (rule) => rule.required(),
+            title: "Price",
+        },
+        {
+            name: "tags",
+            type: "array",
+            title: "Tags",
+            of: [{ type: "string" }]
+        },
+        {
+            name:"dicountPercentage",
+            type:"number",
+            title:"Discount Percentage",
+        },
+        {
+            name:"isNew",
+            type:"boolean",
+            title:"New Badge",
+        }
+    ]
+})

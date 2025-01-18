@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
-import FeatureSection from "../FeatureSection";
 import Link from "next/link";
 import Image from "next/image";
 import { sanityClient } from "@/sanity/lib/sanity";
@@ -13,7 +12,6 @@ interface Product {
   price: number;
   image: string;
   slug: string;
-
 }
 
 interface SanityProduct {
@@ -25,7 +23,7 @@ interface SanityProduct {
   productImage: string | null;
 }
 
-function ProductSection() {
+export default function ProductSection() {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState<number>(500); // Default price range
@@ -76,21 +74,14 @@ function ProductSection() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <section className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-6">
-        <header
-          className="relative bg-cover bg-center h-64"
-          style={{ backgroundImage: "url('/shop.jpg')" }}
-        >
-          <div className="absolute inset-0 bg-opacity-50"></div>
-        </header>
-
-        {/* Filter Toggle Button */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 py-8">
-          <h2 className="text-3xl font-bold text-center sm:text-left">Our All Products</h2>
+        {/* Section Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold">Our Products</h2>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="bg-gray-800 text-white px-4 py-2 mt-4 sm:mt-0 rounded-md hover:bg-gray-700 transition"
+            className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
           >
             {showFilters ? "Hide Filters" : "Show Filters"}
           </button>
@@ -98,12 +89,12 @@ function ProductSection() {
 
         {/* Filters Section */}
         {showFilters && (
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="bg-white p-4 rounded-lg shadow-md mb-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Price Range Filter */}
               <div className="flex flex-col">
                 <label htmlFor="priceRange" className="text-gray-600 font-semibold mb-2">
-                  Max Price: <span className="text-gray-800">${priceRange}</span>
+                  Max Price: <span className="text-gray-800">Rp {priceRange}</span>
                 </label>
                 <input
                   id="priceRange"
@@ -139,7 +130,7 @@ function ProductSection() {
               <div className="flex items-center sm:col-span-2 lg:col-span-1">
                 <button
                   onClick={applyFilters}
-                  className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition w-full"
+                  className="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-800 transition w-full"
                 >
                   Apply Filters
                 </button>
@@ -148,7 +139,7 @@ function ProductSection() {
           </div>
         )}
 
-        {/* Products Grid */}
+        {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
             <Link key={product.id} href={`/product/${product.slug}`}>
@@ -158,20 +149,16 @@ function ProductSection() {
                   alt={product.name}
                   width={500}
                   height={500}
-                  className="w-full h-60 object-cover mb-4 rounded-lg transition-all"
+                  className="w-full h-60 object-cover mb-4 rounded-lg"
                 />
                 <h3 className="text-xl font-bold mb-2">{product.name}</h3>
                 <p className="text-gray-600 mb-2">{product.description}</p>
-                <p className="text-lg font-bold mb-4">${product.price}</p>
+                <p className="text-lg font-bold">Rp {product.price}</p>
               </div>
             </Link>
           ))}
         </div>
       </div>
-
-      <FeatureSection />
-    </div>
+    </section>
   );
 }
-
-export default ProductSection;

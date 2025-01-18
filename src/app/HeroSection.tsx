@@ -1,7 +1,20 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation"; // Correct import for router in Next.js 13+
 
 function HeroSection() {
+  const router = useRouter(); // Initialize useRouter hook
+
+  const handleAllProducts = () => {
+    try {
+      router.push("/all-products"); // Correct usage of router.push
+    } catch (error) {
+      console.error("Failed to redirect to /all-products:", error);
+    }
+  };
+
   return (
     <section className="relative bg-white">
       <div className="bg-gray-200">
@@ -12,10 +25,10 @@ function HeroSection() {
               src="/hero.jpg"
               alt="New Collection"
               className="w-full h-full object-cover"
-              layout="responsive"  // Makes it responsive to screen size
-              width={1200}          // Add width for responsive layout
-              height={600}          // Add height for responsive layout
-              priority              // Ensures the image loads faster
+              layout="responsive"
+              width={1200}
+              height={600}
+              priority
             />
           </div>
 
@@ -36,6 +49,7 @@ function HeroSection() {
             <button
               className="bg-[#7a6229] text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded hover:bg-[#5c491f] transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7a6229]"
               aria-label="Buy Now"
+              onClick={handleAllProducts}
             >
               Buy Now
             </button>

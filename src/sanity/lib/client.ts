@@ -1,25 +1,10 @@
-<<<<<<< HEAD:src/sanity/lib/client.ts
 import { createClient } from "next-sanity";
-import { projectId, dataset, apiVersion } from "../env";
 
 export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: false,
-  token: process.env.SANITY_API_TOKEN, // Add token here
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID, // Use NEXT_PUBLIC_ prefix
+  dataset: "production",
+  useCdn: true, // Use the Sanity CDN for faster reads
+  apiVersion: "2025-01-13", // Use a recent API version
+  token: process.env.SANITY_API_TOKEN, // Optional: Only required for write operations
 });
-=======
-import { createClient } from 'next-sanity'
 
-import { apiVersion, dataset, projectId } from '../env'
-
-export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
-})
-
-export { projectId, dataset }
->>>>>>> 53e511dcf57095dfd307c9ea8251814e6e1d1979:sanity/lib/client.ts
